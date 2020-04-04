@@ -144,8 +144,8 @@ def Count_Load():
 	
 	x = 0
 	MAX = 500#int(MAX_LOAD)
-	
-	print(f"Loading items up to {MAX} items... ")
+
+	print("Loading items up to " + str(MAX) + " items... ")
 
 	try:
 		while x < MAX:
