@@ -146,7 +146,7 @@ def Count_Load():
 	MAX = 500#int(MAX_LOAD)
 	
 	print(f"Loading items up to {MAX} items... ")
-	
+
 	try:
 		while x < MAX:
 			Click_Event()
