@@ -53,7 +53,7 @@ ITEM = []
 PRICE = []
 PRICE_CLEAN = []
 
-driver = webdriver.Chrome('/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver')
+driver = webdriver.Chrome()
 webpage = driver.get(url1)
 wait = WebDriverWait(driver, 10)
 scroll = driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
@@ -251,29 +251,5 @@ print("Stopping display.")
 display.stop() # Stop virtual display
 
 print("Done. Go and change the world!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
