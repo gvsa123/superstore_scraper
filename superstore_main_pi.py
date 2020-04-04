@@ -187,7 +187,7 @@ def Price_Clean(PRICE, PRICE_CLEAN):
 			PRICE_CLEAN.append(i[:-4])
 		else:
 			PRICE_CLEAN.append(i)
-	print(f"Processed {len(PRICE_CLEAN)} items.")
+	print("Processed " + str(len(PRICE_CLEAN)))
 
 
 print("\nAISLE[] created. Processing...\n") # Iterate over aisles
@@ -222,7 +222,7 @@ def Aisle():
 		finally:
 			Soup_Extraction(ITEM, PRICE)
 			print("Downloaded " + str(url0+aisle) + "\n")
-			print(f"{len(ITEM)} items in ITEM with {len(PRICE)} matching PRICES.")
+			print(str(len(ITEM)) + ":ITEMS ;" +  str(len(PRICE)) + " :PRICES")
 
 Aisle()
 
