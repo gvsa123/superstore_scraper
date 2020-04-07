@@ -243,7 +243,7 @@ def filename(ITEM, PRICE, PRICE_CLEAN):
 	print("New file created: cart%s.csv" % i)
 	FILENAME = ("cart%s.csv" % i)
 	
-	df.to_csv(FILENAME)
+	df.to_csv(FILENAME, encoding='utf-8')
 
 filename(ITEM, PRICE, PRICE_CLEAN)
 
