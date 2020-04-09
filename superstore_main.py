@@ -47,7 +47,7 @@ ITEM = []
 PRICE = []
 PRICE_CLEAN = []
 
-driver = webdriver.Chrome('/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver')
+driver = webdriver.Chrome('~/Scripts/Python/WebScraping/WebDriver/chromedriver')
 webpage = driver.get(url1)
 wait = WebDriverWait(driver, 10)
 scroll = driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
@@ -92,7 +92,6 @@ def Click_Event():
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			BUTTON[-4].click()
 			print("...")
-			# ~ print("Button clicked.")		
 		
 		finally:
 			break
@@ -137,7 +136,7 @@ def Count_Load():
 	"""  Counter to monitor maximum loaded items """
 	
 	x = 0
-	MAX = 500#int(MAX_LOAD)
+	MAX = int(MAX_LOAD)
 	
 	print(f"Loading items up to {MAX} items... ")
 	
@@ -154,9 +153,8 @@ def Soup_Extraction(ITEM, PRICE):
 	print("Soup extraction...")
 	time.sleep(WAIT_TIME)
 	driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-
 	html = driver.page_source
-	soup = BeautifulSoup(html, "html.parser")
+	soup = BeautifulSoup(html, "html.parser") # Different soup flavour
 
 	for item in soup.find_all('div', class_='product-tile__details'):
 		name = item.find('a', class_='product-tile__details__info__name__link')
@@ -165,9 +163,7 @@ def Soup_Extraction(ITEM, PRICE):
 		PRICE.append(val.findChild().text[:-2])
 
 def Price_Clean(PRICE, PRICE_CLEAN):
-	"""
-	Parsing PRICE to PRICE_CLEAN
-	"""
+	"""Parsing PRICE to PRICE_CLEAN"""
 	
 	print("Processing prices...")
 	for i in PRICE:
@@ -183,7 +179,6 @@ def Price_Clean(PRICE, PRICE_CLEAN):
 			PRICE_CLEAN.append(i)
 	print(f"Processed {len(PRICE_CLEAN)} items.")
 
-
 print("\nAISLE[] created. Processing...\n") # Iterate over aisles
 
 def Aisle():
@@ -191,10 +186,8 @@ def Aisle():
 	global MAX_LOAD
 	global LOAD_COUNT
 	
-	for aisle in AISLE: # Use [:] for testing
-		
+	for aisle in AISLE: # Use [:] for testing		
 		webpage = driver.get(url0+aisle)
-		
 		print("Loading ---> " + str(url0+aisle) + "\n")
 		time.sleep(2)
 		webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
@@ -211,7 +204,6 @@ def Aisle():
 		except NoSuchElementException as err: # Catch Aisle with different data
 			print(err)		
 			print("Continue with making soup anyway...")	
-			
 		
 		finally:
 			Soup_Extraction(ITEM, PRICE)
@@ -227,7 +219,6 @@ def filename(ITEM, PRICE, PRICE_CLEAN):
 	global FILENAME
 	
 	Price_Clean(PRICE, PRICE_CLEAN) # Parse PRICE into PRICE_CLEAN
-	
 	df = pd.DataFrame(list(zip(ITEM, PRICE_CLEAN)), columns = ['Item', 'Price']) # Create DataFrame
 	print("Dataframe created...")
 	
@@ -236,7 +227,6 @@ def filename(ITEM, PRICE, PRICE_CLEAN):
 
 	print("New file created: cart%s.csv" % i)
 	FILENAME = ("cart%s.csv" % i)
-	
 	df.to_csv(FILENAME)
 
 filename(ITEM, PRICE, PRICE_CLEAN)
