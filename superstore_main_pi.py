@@ -202,9 +202,9 @@ def Aisle():
 		webpage = driver.get(url0+aisle)
 		
 		print("Loading ---> " + str(url0+aisle) + "\n")
-		time.sleep(2)
+		time.sleep(WAIT_TIME)
 		webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
-		time.sleep(2)
+		time.sleep(WAIT_TIME)
 	
 		try:
 			RESULTS = driver.find_element(By.CLASS_NAME, 'pagination')
