@@ -69,10 +69,10 @@ def Click_Event():
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'load-more-button')))
 			
-			if TimeoutException:
-				time.sleep(WAIT_TIME)
-				driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-				wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'load-more-button')))
+		except TimeoutException:
+			time.sleep(WAIT_TIME)
+			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+			wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'load-more-button')))
 		
 		except NoSuchElementException as err:
 			print(err)
@@ -85,12 +85,12 @@ def Click_Event():
 			BUTTON[-4].click()
 			print("...")
 		
-		finally:
-			break
+		#finally:
+			#break
 
 def Max_Load():
 	
-	""" Extracts maximum number of times to loop over Click_Event() based on NUM of RESULTS """
+	"""Extracts maximum number of times to loop over Click_Event() based on NUM of RESULTS """
 		
 	NUM = []
 	
@@ -105,7 +105,7 @@ def Max_Load():
 
 def Load_Count():
 	
-	""" Extracts number of times to loop over Click_Event() based on NUM of RESULTS """
+	"""Extracts number of times to loop over Click_Event() based on NUM of RESULTS """
 	
 	NUM = []
 	LIST = []
@@ -125,7 +125,7 @@ def Load_Count():
 
 def Count_Load():
 	
-	"""  Counter to monitor maximum loaded items """
+	"""Counter to monitor maximum loaded items """
 	
 	x = 0
 	MAX = int(MAX_LOAD)
