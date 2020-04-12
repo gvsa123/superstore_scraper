@@ -39,7 +39,7 @@ ITEM = []
 PRICE = []
 PRICE_CLEAN = []
 
-driver = webdriver.Chrome('~/Scripts/Python/WebScraping/WebDriver/chromedriver')
+driver = webdriver.Chrome('/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver')
 webpage = driver.get(url1)
 wait = WebDriverWait(driver,10,2)
 scroll = driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
@@ -70,6 +70,7 @@ def Click_Event():
 			wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'load-more-button')))
 			
 		except TimeoutException:
+			print("Loading...")
 			time.sleep(WAIT_TIME)
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'load-more-button')))
@@ -85,8 +86,8 @@ def Click_Event():
 			BUTTON[-4].click()
 			print("...")
 		
-		#finally:
-			#break
+		finally:
+			break
 
 def Max_Load():
 	
@@ -105,7 +106,7 @@ def Max_Load():
 
 def Load_Count():
 	
-	"""Extracts number of times to loop over Click_Event() based on NUM of RESULTS """
+	"""Tracks number of times to loop over Click_Event() based on NUM of RESULTS """
 	
 	NUM = []
 	LIST = []
@@ -128,8 +129,7 @@ def Count_Load():
 	"""Counter to monitor maximum loaded items """
 	
 	x = 0
-	MAX = int(MAX_LOAD)
-	
+	MAX = int(MAX_LOAD) # Sets option to iterate over ALL items. 
 	print(f"Loading items up to {MAX} items... ")
 	
 	try:
