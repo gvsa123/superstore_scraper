@@ -144,7 +144,7 @@ def Count_Load():
 	
 	x = 0
 	MAX = int(MAX_LOAD) # Sets option to iterate over ALL items. 
-	print(f"Loading items up to {MAX} items... ")
+	print("Loading items up to " + str(MAX) + " items...")
 	
 	try:
 		while x < MAX:
@@ -183,7 +183,7 @@ def Price_Clean(PRICE, PRICE_CLEAN):
 			PRICE_CLEAN.append(i[:-4])
 		else:
 			PRICE_CLEAN.append(i)
-	print(f"Processed {len(PRICE_CLEAN)} items.")
+	print("Processed " + str(len(PRICE_CLEAN)) + " items.")
 
 print("\nAISLE[] created. Processing...\n") # Iterate over aisles
 
@@ -214,7 +214,7 @@ def Aisle():
 		finally:
 			Soup_Extraction(ITEM, PRICE)
 			print("Downloaded " + str(url0+aisle) + "\n")
-			print(f"{len(ITEM)} items in ITEM with {len(PRICE)} matching PRICES.")
+			print(str(len(ITEM)) + " items in ITEM with " + str(len(PRICE)) + " matching PRICES.")
 
 Aisle()
 
@@ -237,29 +237,3 @@ def filename(ITEM, PRICE, PRICE_CLEAN):
 
 filename(ITEM, PRICE, PRICE_CLEAN)
 print("Done. Go and change the world!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
