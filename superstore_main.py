@@ -39,11 +39,25 @@ ITEM = []
 PRICE = []
 PRICE_CLEAN = []
 
-driver = webdriver.Chrome('/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver')
+
+	
+if os.getcwd() != '/home/girard/Scripts/Python/WebScraping/superstore_scraper':
+	DRIVER_PATH = ''
+	WAIT_TIME = 20
+else:
+	DRIVER_PATH = '/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver'
+	WAIT_TIME = 10
+	
+print("Setting webdriver path to: " + DRIVER_PATH)
+print("Setting WAIT_TIME to " + str(WAIT_TIME))
+
+
+driver = webdriver.Chrome(DRIVER_PATH)
+
 webpage = driver.get(url1)
 wait = WebDriverWait(driver,10,2)
 scroll = driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-WAIT_TIME = 10
+
 
 # Create bs4 instance
 time.sleep(WAIT_TIME)
