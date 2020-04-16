@@ -42,10 +42,12 @@ PRICE_CLEAN = []
 
 	
 if os.getcwd() != '/home/girard/Scripts/Python/WebScraping/superstore_scraper':
-	DRIVER_PATH = '()'
+	#DRIVER_PATH = '()' # edit driver paths; make explicit
+	driver = webdriver.Chrome()
 	WAIT_TIME = 20
 else:
-	DRIVER_PATH = '/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver'
+	#DRIVER_PATH = '/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver' # edit driver paths; make explicit
+	driver = webdriver.Chrome('/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver')
 	WAIT_TIME = 10
 	
 print("Setting webdriver path to: " + DRIVER_PATH)
