@@ -55,10 +55,6 @@ else:
 	#DRIVER_PATH = '/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver' # edit driver paths; make explicit
 	driver = webdriver.Chrome('/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver')
 	WAIT_TIME = 10
-	
-print("Setting webdriver path to: " + DRIVER_PATH)
-print("Setting WAIT_TIME to " + str(WAIT_TIME))
-
 
 #driver = webdriver.Chrome(DRIVER_PATH)
 
