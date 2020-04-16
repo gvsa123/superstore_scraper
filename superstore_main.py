@@ -245,7 +245,7 @@ def filename(ITEM, PRICE, PRICE_CLEAN):
 
 filename(ITEM, PRICE, PRICE_CLEAN)
 
-if RUN_ON_PI = True:
+if RUN_ON_PI == True:
 	print("Stopping display.")
 	display.stop() # Stop virtual display
 	
