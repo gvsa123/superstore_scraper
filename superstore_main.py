@@ -54,7 +54,7 @@ print("Setting webdriver path to: " + DRIVER_PATH)
 print("Setting WAIT_TIME to " + str(WAIT_TIME))
 
 
-driver = webdriver.Chrome(DRIVER_PATH)
+#driver = webdriver.Chrome(DRIVER_PATH)
 
 webpage = driver.get(url1)
 wait = WebDriverWait(driver,10,2)
