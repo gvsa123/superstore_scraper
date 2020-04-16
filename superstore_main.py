@@ -1,3 +1,4 @@
+from pyvirtualdisplay import Display
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -39,9 +40,14 @@ ITEM = []
 PRICE = []
 PRICE_CLEAN = []
 
+RUN_ON_PI = False
 
 	
 if os.getcwd() != '/home/girard/Scripts/Python/WebScraping/superstore_scraper':
+	RUN_ON_PI = True
+	display = Display(visible=0, size=(1024, 768)) # For headless RPi
+	display.start()
+	print("Running headless. Display started.")
 	#DRIVER_PATH = '()' # edit driver paths; make explicit
 	driver = webdriver.Chrome()
 	WAIT_TIME = 20
@@ -238,4 +244,9 @@ def filename(ITEM, PRICE, PRICE_CLEAN):
 	df.to_csv(FILENAME)
 
 filename(ITEM, PRICE, PRICE_CLEAN)
+
+if RUN_ON_PI = True:
+	print("Stopping display.")
+	display.stop() # Stop virtual display
+	
 print("Done. Go and change the world!")
