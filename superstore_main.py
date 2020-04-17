@@ -1,4 +1,3 @@
-from pyvirtualdisplay import Display
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -40,10 +39,10 @@ ITEM = []
 PRICE = []
 PRICE_CLEAN = []
 
-RUN_ON_PI = False
-
+RUN_ON_PI = False # Set variable if running on pi
 	
 if os.getcwd() != '/home/girard/Scripts/Python/WebScraping/superstore_scraper':
+	from pyvirtualdisplay import Display
 	RUN_ON_PI = True
 	display = Display(visible=0, size=(1024, 768)) # For headless RPi
 	display.start()
@@ -237,7 +236,7 @@ def filename(ITEM, PRICE, PRICE_CLEAN):
 
 	print("New file created: cart%s.csv" % i)
 	FILENAME = ("cart%s.csv" % i)
-	df.to_csv(FILENAME)
+	df.to_csv(FILENAME, encoding='utf-8')
 
 filename(ITEM, PRICE, PRICE_CLEAN)
 
