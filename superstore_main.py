@@ -50,15 +50,16 @@ if os.getcwd() != '/home/girard/Scripts/Python/WebScraping/superstore_scraper':
 	#DRIVER_PATH = '()' # edit driver paths; make explicit
 	driver = webdriver.Chrome()
 	WAIT_TIME = 20
+	wait = WebDriverWait(driver,10,5)
 else:
 	#DRIVER_PATH = '/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver' # edit driver paths; make explicit
 	driver = webdriver.Chrome('/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver')
 	WAIT_TIME = 10
+	wait = WebDriverWait(driver,10,2)
 
 #driver = webdriver.Chrome(DRIVER_PATH)
 
 webpage = driver.get(url1)
-wait = WebDriverWait(driver,10,2)
 scroll = driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 
 
