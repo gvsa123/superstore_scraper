@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
-
+from datetime import datetime
 
 import time
 import pandas as pd
@@ -40,7 +40,7 @@ PRICE = []
 PRICE_CLEAN = []
 
 RUN_ON_PI = False # Set variable if running on pi
-	
+
 if os.getcwd() != '/home/girard/Scripts/Python/WebScraping/superstore_scraper':
 	from pyvirtualdisplay import Display
 	RUN_ON_PI = True
@@ -79,87 +79,87 @@ for i in AISLE:
 	print(i)
 
 def Click_Event():
-	
+
 	"""Initial waiting for clickable elements ; Scroll to bottom and wait for element_to_be_clickable"""
-	
+
 	while True:
 		try:
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'load-more-button')))
-			
+
 		except TimeoutException:
 			print("Loading...")
 			time.sleep(WAIT_TIME)
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'load-more-button')))
-		
+
 		except NoSuchElementException as err:
 			print(err)
 			continue
-		
+
 		else:
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			BUTTON = driver.find_elements_by_tag_name('button')
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			BUTTON[-4].click()
 			print("...")
-		
+
 		finally:
 			break
 
 def Max_Load():
-	
+
 	"""Extracts maximum number of times to loop over Click_Event() based on NUM of RESULTS """
-		
+
 	NUM = []
-	
+
 	for i in RESULTS.text:
 		NUM.append(i)
-		
+
 	STR = "".join(NUM) # Creates str from list
-	
+
 	for i in STR.split():
 		if i.isdigit():
 			return i
 
 def Load_Count():
-	
+
 	"""Tracks number of times to loop over Click_Event() based on NUM of RESULTS """
-	
+
 	NUM = []
 	LIST = []
-	TEMP_NUM = []	
-	
+	TEMP_NUM = []
+
 	for i in RESULTS.text:
 		NUM.append(i)
-		
+
 	STR = "".join(NUM) # Creates str from list
-	
+
 	for x in STR.split(" "):
 		LIST.append(x)
-	
+
 	TEMP_NUM.append(LIST[0].split("-"))
-	
+
 	return TEMP_NUM[0][1]
 
 def Count_Load():
-	
+
 	"""Counter to monitor maximum loaded items """
-	
+
 	x = 0
-	MAX = int(MAX_LOAD) # Sets option to iterate over ALL items. 
+	MAX = int(MAX_LOAD) # Sets option to iterate over ALL items.
 	print("Loading items up to " + str(MAX) + " items...")
-	
+
 	try:
 		while x < MAX:
 			Click_Event()
 			x += int(LOAD_COUNT)
-	
+
 	except KeyboardInterrupt:
 		pass
 
 def Soup_Extraction(ITEM, PRICE):
-	
+
 	print("Soup extraction...")
 	time.sleep(WAIT_TIME)
 	driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
@@ -174,7 +174,7 @@ def Soup_Extraction(ITEM, PRICE):
 
 def Price_Clean(PRICE, PRICE_CLEAN):
 	"""Parsing PRICE to PRICE_CLEAN"""
-	
+
 	print("Processing prices...")
 	for i in PRICE:
 		if i[-1] == ')':
@@ -195,14 +195,14 @@ def Aisle():
 	global RESULTS
 	global MAX_LOAD
 	global LOAD_COUNT
-	
-	for aisle in AISLE: # Use [:] for testing		
+
+	for aisle in AISLE[:1]: # Use [:] for testing
 		webpage = driver.get(url0+aisle)
 		print("Loading ---> " + str(url0+aisle) + "\n")
 		time.sleep(2)
 		webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
 		time.sleep(2)
-	
+
 		try:
 			RESULTS = driver.find_element(By.CLASS_NAME, 'pagination')
 			print("RESULTS found.")
@@ -212,9 +212,9 @@ def Aisle():
 			print("Aisle loaded.")
 
 		except NoSuchElementException as err: # Catch Aisle with different data
-			print(err)		
-			print("Continue with making soup anyway...")	
-		
+			print(err)
+			print("Continue with making soup anyway...")
+
 		finally:
 			Soup_Extraction(ITEM, PRICE)
 			print("Downloaded " + str(url0+aisle) + "\n")
@@ -224,14 +224,19 @@ Aisle()
 
 def filename(ITEM, PRICE, PRICE_CLEAN):
 	"""Database function"""
-	
+
+	NOW = datetime.now()
+	DATE = NOW.strftime("%Y-%m-%d")
+
 	i = 0
 	global FILENAME
-	
+
 	Price_Clean(PRICE, PRICE_CLEAN) # Parse PRICE into PRICE_CLEAN
-	df = pd.DataFrame(list(zip(ITEM, PRICE_CLEAN)), columns = ['Item', 'Price']) # Create DataFrame
+	df = pd.DataFrame(list(zip(ITEM, PRICE_CLEAN)), columns = ['Item', 'Price'])
+	df['Date'] = DATE
+
 	print("Dataframe created...")
-	
+
 	while os.path.exists("cart%s.csv" % i): # Increment filename
 		i += 1
 
@@ -244,5 +249,5 @@ filename(ITEM, PRICE, PRICE_CLEAN)
 if RUN_ON_PI == True:
 	print("Stopping display.")
 	display.stop() # Stop virtual display
-	
-print("Done. Go and change the world!")
+
+print("Done. Scrape successful.")
