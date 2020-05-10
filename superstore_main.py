@@ -196,7 +196,7 @@ def Aisle():
 	global MAX_LOAD
 	global LOAD_COUNT
 
-	for aisle in AISLE[:1]: # Use [:] for testing
+	for aisle in AISLE:# Use [:] for testing
 		webpage = driver.get(url0+aisle)
 		print("Loading ---> " + str(url0+aisle) + "\n")
 		time.sleep(2)
@@ -242,7 +242,7 @@ def filename(ITEM, PRICE, PRICE_CLEAN):
 
 	print("New file created: cart%s.csv" % i)
 	FILENAME = ("cart%s.csv" % i)
-	df.to_csv(FILENAME, encoding='utf-8')
+	df.to_csv(FILENAME, encoding='utf-8', index=False)
 
 filename(ITEM, PRICE, PRICE_CLEAN)
 
