@@ -61,7 +61,7 @@ else:
 
 webpage = driver.get(url1)
 scroll = driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-
+webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
 
 # Create bs4 instance
 time.sleep(WAIT_TIME)

@@ -1,3 +1,4 @@
+#from pyvirtualdisplay import Display
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -6,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
-
+from datetime import datetime
 
 import time
 import pandas as pd
@@ -40,6 +41,11 @@ Created to capture a snapshot of the prices from the local superstore during the
 
 """
 
+# display = Display(visible=0, size=(1024, 768)) # For headless RPi
+# display.start()
+# print("Display started.")
+
+
 url1 = "https://www.realcanadiansuperstore.ca/Shop-by-Category/c/017377000000"
 url0 = "https://www.realcanadiansuperstore.ca/"
 
@@ -47,7 +53,7 @@ ITEM = []
 PRICE = []
 PRICE_CLEAN = []
 
-driver = webdriver.Chrome('/home/girard/Scripts/Python/WebScraping/WebDriver/chromedriver')
+driver = webdriver.Chrome()
 webpage = driver.get(url1)
 wait = WebDriverWait(driver, 10)
 scroll = driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
@@ -69,88 +75,88 @@ for i in AISLE:
 	print(i)
 
 def Click_Event():
-	
+
 	"""Initial waiting for clickable elements ; Scroll to bottom and wait for element_to_be_clickable"""
-	
+
 	while True:
 		try:
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'load-more-button')))
-			
+
 			if TimeoutException:
 				time.sleep(WAIT_TIME)
 				driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 				wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'load-more-button')))
-		
+
 		except NoSuchElementException as err:
 			print(err)
 			continue
-		
+
 		else:
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			BUTTON = driver.find_elements_by_tag_name('button')
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 			BUTTON[-4].click()
 			print("...")
-			# ~ print("Button clicked.")		
-		
+			# ~ print("Button clicked.")
+
 		finally:
 			break
 
 def Max_Load():
-	
+
 	""" Extracts maximum number of times to loop over Click_Event() based on NUM of RESULTS """
-		
+
 	NUM = []
-	
+
 	for i in RESULTS.text:
 		NUM.append(i)
-		
+
 	STR = "".join(NUM) # Creates str from list
-	
+
 	for i in STR.split():
 		if i.isdigit():
 			return i
 
 def Load_Count():
-	
+
 	""" Extracts number of times to loop over Click_Event() based on NUM of RESULTS """
-	
+
 	NUM = []
 	LIST = []
-	TEMP_NUM = []	
-	
+	TEMP_NUM = []
+
 	for i in RESULTS.text:
 		NUM.append(i)
-		
+
 	STR = "".join(NUM) # Creates str from list
-	
+
 	for x in STR.split(" "):
 		LIST.append(x)
-	
+
 	TEMP_NUM.append(LIST[0].split("-"))
-	
+
 	return TEMP_NUM[0][1]
 
 def Count_Load():
-	
+
 	"""  Counter to monitor maximum loaded items """
-	
+
 	x = 0
 	MAX = 500#int(MAX_LOAD)
-	
-	print(f"Loading items up to {MAX} items... ")
-	
+
+	print("Loading items up to " + str(MAX) + " items... ")
+
 	try:
 		while x < MAX:
 			Click_Event()
 			x += int(LOAD_COUNT)
-	
+
 	except KeyboardInterrupt:
 		pass
 
 def Soup_Extraction(ITEM, PRICE):
-	
+
 	print("Soup extraction...")
 	time.sleep(WAIT_TIME)
 	driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
@@ -168,7 +174,7 @@ def Price_Clean(PRICE, PRICE_CLEAN):
 	"""
 	Parsing PRICE to PRICE_CLEAN
 	"""
-	
+
 	print("Processing prices...")
 	for i in PRICE:
 		if i[-1] == ')':
@@ -181,7 +187,7 @@ def Price_Clean(PRICE, PRICE_CLEAN):
 			PRICE_CLEAN.append(i[:-4])
 		else:
 			PRICE_CLEAN.append(i)
-	print(f"Processed {len(PRICE_CLEAN)} items.")
+	print("Processed " + str(len(PRICE_CLEAN)))
 
 
 print("\nAISLE[] created. Processing...\n") # Iterate over aisles
@@ -190,16 +196,16 @@ def Aisle():
 	global RESULTS
 	global MAX_LOAD
 	global LOAD_COUNT
-	
-	for aisle in AISLE: # Use [:] for testing
-		
+
+	for aisle in AISLE[:1]: # Use [:] for testing
+
 		webpage = driver.get(url0+aisle)
-		
+
 		print("Loading ---> " + str(url0+aisle) + "\n")
-		time.sleep(2)
+		time.sleep(WAIT_TIME)
 		webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
-		time.sleep(2)
-	
+		time.sleep(WAIT_TIME)
+
 		try:
 			RESULTS = driver.find_element(By.CLASS_NAME, 'pagination')
 			print("RESULTS found.")
@@ -209,61 +215,43 @@ def Aisle():
 			print("Aisle loaded.")
 
 		except NoSuchElementException as err: # Catch Aisle with different data
-			print(err)		
-			print("Continue with making soup anyway...")	
-			
-		
+			print(err)
+			print("Continue with making soup anyway...")
+
+
 		finally:
 			Soup_Extraction(ITEM, PRICE)
 			print("Downloaded " + str(url0+aisle) + "\n")
-			print(f"{len(ITEM)} items in ITEM with {len(PRICE)} matching PRICES.")
+			print(str(len(ITEM)) + ":ITEMS ;" +  str(len(PRICE)) + " :PRICES")
 
 Aisle()
 
 def filename(ITEM, PRICE, PRICE_CLEAN):
 	"""Database function"""
-	
+
+	# Set date as string - why as string?
+	NOW = datetime.now()
+	DATE = now.strftime("%m-%d-%Y")
+
 	i = 0
 	global FILENAME
-	
+
 	Price_Clean(PRICE, PRICE_CLEAN) # Parse PRICE into PRICE_CLEAN
-	
-	df = pd.DataFrame(list(zip(ITEM, PRICE_CLEAN)), columns = ['Item', 'Price']) # Create DataFrame
+
+	df = pd.DataFrame(list(zip(ITEM, PRICE_CLEAN), DATE), columns = ['Item', 'Price', 'Date']) # Create DataFrame
 	print("Dataframe created...")
-	
+
 	while os.path.exists("cart%s.csv" % i): # Increment filename
 		i += 1
 
 	print("New file created: cart%s.csv" % i)
 	FILENAME = ("cart%s.csv" % i)
-	
-	df.to_csv(FILENAME)
+
+	df.to_csv(FILENAME, encoding='utf-8')
 
 filename(ITEM, PRICE, PRICE_CLEAN)
+
+print("Stopping display.")
+display.stop() # Stop virtual display
+
 print("Done. Go and change the world!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
